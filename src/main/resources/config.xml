@@ -4,4 +4,7 @@
 	<factory>
 		<service ServiceName="IUserSvc" FQDN="com.icaria.model.services.userservices.MySQLUserImpl" />
 	</factory>
+	<connections>
+		<connection password='ibiza-ginger-flash-office-garden-1550' />
+	</connections>
 </config>

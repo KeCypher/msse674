@@ -1,0 +1,53 @@
+services:
+  frontend: 
+    image: bitnami/tomcat:latest
+    ports:
+      - "8080:8080"
+#    volumes:
+#      - webapp-store:/bitnami
+    environment: 
+      - TOMCAT_USERNAME=msse674
+      - TOMCAT_PASSWORD=securePassword   
+    networks:
+      internal-net:
+        aliases: 
+          - com.ifs.frontend
+    container_name: webserver
+    build:
+      context:  ./docker-build
+      dockerfile: ./webserver.Dockerfile
+  mysql: 
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    networks:
+      internal-net:
+        aliases: 
+          - com.ifs.mysql
+    container_name: mysql
+    build: 
+      context: ./docker-build
+      dockerfile: mysql.Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: 'test_pass' # TODO: Change this
+      MYSQL_USER: 'java'
+      MYSQL_PASSWORD: 'pass'
+    volumes:
+      - db-datastores:/var/lib/mysql
+  redis: 
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      internal-net:
+        aliases: 
+          - com.ifs.redis
+    container_name: redis
+    build:
+      context: ./docker-build
+      dockerfile: redis.Dockerfile
+volumes: 
+  db-datastores: 
+  webapp-store: 
+networks: 
+  internal-net: {}

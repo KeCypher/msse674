@@ -80,7 +80,7 @@ public class UserManager extends BusinessManager {
 		} catch (ServiceLoadException e) {
 			e.printStackTrace();
 		}
-		try (Jedis jedis = new Jedis()) {
+		try (Jedis jedis = new Jedis("host.docker.internal", 6379)) {
 			jedis.hset(user.getSessionID(), "username", user.getUsername());
 			jedis.hset(user.getSessionID(), "loggedIn", LocalDateTime.now().toString());
 		}
