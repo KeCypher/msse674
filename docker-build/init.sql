@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `ifs`.`users` (
   `password` VARCHAR(45) NULL,
   `firstname` VARCHAR(45) NULL,
   `lastname` VARCHAR(45) NULL,
+  `email` VARCHAR(45) NULL,
   PRIMARY KEY (`user_id`))
 ENGINE = InnoDB;
 

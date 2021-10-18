@@ -194,6 +194,7 @@ public class User implements Serializable {
 				&& !Objects.isNull(lastname)
 				&& !Objects.isNull(firstname)
 				&& !Objects.isNull(password)
+				&& !Objects.isNull(email)
 				&& !Objects.isNull(sessionID);			
 	}
 
@@ -213,6 +214,7 @@ public class User implements Serializable {
 				&& Objects.equals(username, other.username)
 				&& Objects.equals(lastname, other.lastname)
 				&& Objects.equals(firstname, other.firstname)
+				&& Objects.equals(email, other.email)
 				&& Objects.equals(password, other.password);
 	}
 	
@@ -224,7 +226,8 @@ public class User implements Serializable {
 				lastname, 
 				firstname,
 				password,
-				sessionID
+				sessionID,
+				email
 				);
 	}
 	
@@ -236,6 +239,7 @@ public class User implements Serializable {
 		.append("\nusername=" + username)
 		.append("\nlastname=" + lastname)
 		.append("\nfirstname=" + firstname)
+		.append("\nemail=" + email)
 		.append("\npassword=" + password)
 		.append("\nsessionID=" + sessionID);
 		return sb.toString();

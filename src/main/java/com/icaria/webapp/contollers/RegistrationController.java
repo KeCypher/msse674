@@ -2,14 +2,28 @@ package com.icaria.webapp.contollers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.icaria.model.business.UserManager;
 import com.icaria.model.domain.User;
+import com.icaria.webapp.beans.Registration;
 
 /**
  * @author Keanan Cypher
@@ -17,44 +31,66 @@ import com.icaria.model.domain.User;
  * This basic registration controller handles user reservation in the Icaria Travel System
  *
  */
+@Controller
+@RequestMapping("register")
 public class RegistrationController extends HttpServlet{
 	 private static final long serialVersionUID = 1L;
 
 	 //These get calls should never realistically be called, but they are very useful for troubleshooting
-	 public void doGet(HttpServletRequest request, HttpServletResponse response)
-			 throws ServletException, IOException {
-		 PrintWriter out = response.getWriter();
-	   	 out.println(" Registration Controller Get Executed");
-	   	 out.flush();
-	   	 out.close();
+	    @RequestMapping(method = RequestMethod.GET)
+	    public ModelAndView showForm() {
+	        return new ModelAndView("register", "registration", new Registration());
+	    }
+
+	 @RequestMapping(method = RequestMethod.POST)
+	 public String submit( @Valid @ModelAttribute("registration") Registration regreq, 
+     BindingResult result, ModelMap model)  {
+	    if (result.hasErrors()) {
+	        return "errorBind";
+	    }
+	    String tempID = UUID.randomUUID().toString();
+	    model.addAttribute("session", tempID);
+	    model.addAttribute("username", regreq.getUsername());
+	    model.addAttribute("firstname", regreq.getFirstname());
+	    model.addAttribute("lastname", regreq.getLastname());
+	    model.addAttribute("password", regreq.getEmail());
+	    model.addAttribute("password2", regreq.getPassword());
+	    model.addAttribute("email", regreq.getPassword2());
+		 User user = new User();
+		 user.setSessionID(tempID);
+		 user.setUsername(regreq.getUsername());
+		 user.setFirstname(regreq.getFirstname());
+		 user.setLastname(regreq.getLastname());
+		 user.setLastname(regreq.getEmail());
+		 user.setPassword(regreq.getPassword());
+		 boolean confirm = regreq.getPassword2().equals(user.getPassword());
+		 model.addAttribute("confirm", confirm);
+	   	 UserManager manager = UserManager.getInstance();
+		 boolean success = manager.performAction("register", user);
+		 model.addAttribute("success", success);
+	   	 if (confirm && success) {
+		   	 return "registrationComplete";	   		 
+	   	 } else {
+	   		 return "errorCode";
+	   	 }
 	 }
 	 
-	 public void doPost(HttpServletRequest request, HttpServletResponse response)
-			 throws ServletException, IOException  {
-		 PrintWriter out = response.getWriter();
+	 public static void main(String[] args) {
 		 User user = new User();
-		 user.setSessionID(request.getParameter("sessionid"));
-		 user.setUsername(request.getParameter("username"));
-		 user.setFirstname(request.getParameter("firstName"));
-		 user.setLastname(request.getParameter("lastName"));
-		 user.setPassword(request.getParameter("password"));
-		 boolean confirm = request.getParameter("password2").equals(user.getPassword());
-		 boolean success = user.validate();
-	   	 out.println("Registration Controller Post Executed");
-	   	 out.println("You are registering the following user information:");
-	   	 out.println(user.toString());
-	   	 out.println("This user is " + ((success) ? "valid" : "not valid"));
-	   	 out.println("Additionally your password and confirmation " + ((confirm) ? "match!" : "don't match."));
-	   	 out.println("This means your registration would " + ((success && confirm) ? "succeed" : "fail"));
-	   	 out.println("Persisting user...");
+		 user.setSessionID("1234567890");
+		 user.setUsername("test");
+		 user.setFirstname("test");
+		 user.setLastname("test");
+		 user.setEmail("test");
+		 user.setPassword("test");
+		 boolean confirm = "test".equals(user.getPassword());
 	   	 UserManager manager = UserManager.getInstance();
-	   	 if (manager.performAction("register", user)) {
-	   		out.println("Persistence Successful");
+		 boolean success = manager.performAction("register", user);
+	   	 if (confirm && success) {
+	   		 System.out.print("Yay");
 	   	 } else {
-	   		 out.println("Persistence failed");
+	   		 System.out.print("Boo");
 	   	 }
-	   	 out.flush();
-	   	 out.close();
 	 }
 	 
 	/**

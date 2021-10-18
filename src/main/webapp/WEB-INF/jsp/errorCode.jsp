@@ -1,0 +1,45 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <h3>Something Failed!</h3>
+             <table>
+                <tr>
+                    <td>Session</td>
+                    <td>${session}</td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                    <td>${username}</td>
+                </tr>
+                <tr>
+                    <td>firstname</td>
+                    <td>${firstname}</td>
+                </tr>
+                <tr>
+                    <td>lastname</td>
+                    <td>${lastname}</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>${email}</td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td>${password}</td>
+                </tr>
+                <tr>
+                    <td>password2</td>
+                    <td>${password2}</td>
+                </tr>
+                <tr>
+                    <td>confirm</td>
+                    <td>${confirm}</td>
+                </tr>
+                <tr>
+                    <td>success</td>
+                    <td>${success}</td>
+                </tr>
+            </table>
+    </body>
+</html>

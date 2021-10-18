@@ -13,15 +13,15 @@
       </property>
       
       <property name = "hibernate.connection.url">
-         jdbc:mysql://localhost:3306/icaria
+         jdbc:mysql://mysql:3306/ifs
       </property>
       
       <property name = "hibernate.connection.username">
-         java
+         root
       </property>
       
       <property name = "hibernate.connection.password">
-         JavaPassword1!
+         test_pass
       </property>
       
       <property name="hibernate.current_session_context_class">
